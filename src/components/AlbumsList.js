@@ -14,7 +14,7 @@ function AlbumsList({ user }) {
   console.log(data, error, isLoading);
 
   let content = isLoading ? (
-    <Skeleton times={3} />
+    <Skeleton className="h-10 w-full" times={3} />
   ) : error ? (
     <div>Error loading albums.</div>
   ) : (
@@ -30,9 +30,11 @@ function AlbumsList({ user }) {
 
   return (
     <div>
-      <div>
-        Albums for {user.name}
-        <Button onClick={handleAddAlbum}>+ Add Album</Button>
+      <div className="m-2 flex flex-row items-center justify-between">
+        <h3 className="text-lg font-bold">Albums for {user.name}</h3>
+        <Button loading={results.isLoading} onClick={handleAddAlbum}>
+          + Add Album
+        </Button>
       </div>
       <div>{content}</div>
     </div>
