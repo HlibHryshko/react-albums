@@ -1,13 +1,26 @@
-import { useAddAlbumMutation, useFetchPhotosQuery } from "../store";
+import { useAddAlbumMutation, useAddPhotoMutation, useFetchPhotosQuery } from "../store";
 import Button from "./Button";
+import PhotosListItem from "./PhotosListItem";
+import Skeleton from "./Skeleton";
 
 const PhotosList = ({ album }) => {
-  const {data, isFetching, error} = useFetchPhotosQuery(album);
-  const [addPhoto, addPhotoResults] = useAddAlbumMutation();
+  const { data, isFetching, error } = useFetchPhotosQuery(album);
+  const [addPhoto, addPhotoResults] = useAddPhotoMutation();
 
   const handleAddPhoto = () => {
     addPhoto(album);
   };
+
+  let content;
+  if (isFetching) {
+    content = <Skeleton className="h-8 h-8" times={4} />;
+  } else if (error) {
+    content = <div>Error fetching photos...</div>;
+  } else {
+    content = data.map((photo) => {
+      return <PhotosListItem key={photo.id} photo={photo} />;
+    });
+  }
 
   return (
     <div>
@@ -17,6 +30,7 @@ const PhotosList = ({ album }) => {
           + Add Photo
         </Button>
       </div>
+      <div>{content}</div>
     </div>
   );
 };
